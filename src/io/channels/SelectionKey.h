@@ -12,7 +12,11 @@ public:
 	SelectionKey(const SelectionKey&) = delete;
 	SelectionKey(SelectionKey&&) = delete;
 	SelectionKey& operator=(const SelectionKey&) = delete;
-
+public:
+	static const OP OP_ACCEPT 	= OP::ACCEPT;
+	static const OP OP_CONNECT 	= OP::CONNECT;
+	static const OP OP_READ 	= OP::READ;
+	static const OP OP_WRITE 	= OP::WRITE;
 };
 
 }
