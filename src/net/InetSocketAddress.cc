@@ -19,8 +19,24 @@ InetSocketAddress::~InetSocketAddress()
 	curr = NULL;
 }
 
-bool InetSocketAddress::init(std::string hostname, std::string port)
+bool InetSocketAddress::init(std::string hostname, std::string port, enum SOCKMODE mode/*=TCPSERV*/)
 {
+	memset(&hints, 0 ,sizeof(struct addrinfo));
+	if (bNeedRealse){
+		freeaddrinfo(result_);
+		curr = NULL;
+	}
+	switch(mode){
+			case SOCKMODE::TCPSERV:
+				TcpServMode();
+				break;
+			case SOCKMODE::TCPCLIENT:
+				TcpClientMode();
+				break;
+			default:
+				return false;
+				break;
+	}
 	if (0 != getaddrinfo(hostname.c_str(), port.c_str(), &hints, &result_)){
 		return false;
 	}
@@ -31,36 +47,41 @@ bool InetSocketAddress::init(std::string hostname, std::string port)
 	return true;
 }
 
-InetSocketAddress& InetSocketAddress::TcpServMode()
+void InetSocketAddress::TcpServMode()
 {
 	hints.ai_flags = AI_PASSIVE;
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
-	return *this;
 }
 
-int InetSocketAddress::getaifamily()
+void InetSocketAddress::TcpClientMode()
+{
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+}
+
+int InetSocketAddress::getaifamily() 
 {
 	if (!bNeedRealse)
 		return -1;
 	return curr->ai_family;
 }
 
-int InetSocketAddress::getsocktype()
+int InetSocketAddress::getsocktype() 
 {
 	if (!bNeedRealse)
 		return -1;
 	return curr->ai_socktype;
 }
 
-int InetSocketAddress::getprotocol()
+int InetSocketAddress::getprotocol() 
 {
 	if (!bNeedRealse)
 		return -1;
 	return curr->ai_protocol;
 }
 
-sockaddr* InetSocketAddress::getsockaddr()
+sockaddr* InetSocketAddress::getsockaddr() 
 {
 	//TODO
 	if (!bNeedRealse)
@@ -68,13 +89,14 @@ sockaddr* InetSocketAddress::getsockaddr()
 	return curr->ai_addr;
 }
 
-socklen_t InetSocketAddress::getsocklen()
+socklen_t InetSocketAddress::getsocklen() 
 {
 	if (!bNeedRealse)
 		return -1;
 	return curr->ai_addrlen;
 }
 
+//TODO
 bool InetSocketAddress::next()
 {
 	if (NULL == curr->ai_next)
@@ -83,6 +105,7 @@ bool InetSocketAddress::next()
 	return true;
 }
 
+//TODO
 bool InetSocketAddress::head()
 {
 	if (NULL == result_)

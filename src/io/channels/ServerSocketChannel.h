@@ -2,10 +2,13 @@
 #define ZNET_IO_CHANNELS_SERVERSOCKETCHANNEL_HEAD_
 
 #include"../../net/InetSocketAddress.h"
-#include"SocketChannel.h"
+//#include"SelectionKey.h"
 
 namespace zNet{
-
+/*
+ * A listening socket  
+ *
+ */
 class ServerSocketChannel{
 
 public:
@@ -16,6 +19,8 @@ private:
 public:
     bool Bind(InetSocketAddress& local, int backlog = 65535);
 	int Accept();
+	//SelectionKey& regist()
+	inline int getSockfd(){return ServerSocketfd;}
     
 };
 
