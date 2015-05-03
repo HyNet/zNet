@@ -1,5 +1,6 @@
 #include"SocketChannel.h"
 #include<unistd.h>
+#include<sys/socket.h>
 
 using namespace zNet;
 
@@ -14,8 +15,13 @@ SocketChannel::~SocketChannel()
 		close(Socketfd);
 }
 
-void SocketChannel::open(int fd)
+bool SocketChannel::Connect( InetSocketAddress& addr)
 {
-	Socketfd = fd;
+	Socketfd = socket(addr.getaifamily(), addr.getsocktype(), addr.getprotocol());
+	if (Socketfd < 0)
+		return false;
+	if (0 != connect(Socketfd, addr.getsockaddr(), addr.getsocklen()))
+		return false;
+	
+	return true;
 }
-

@@ -1,6 +1,8 @@
 #ifndef ZNET_IO_CHANNELS_SOCKETCHANNEL_HEAD_
 #define ZNET_IO_CHANNELS_SOCKETCHANNEL_HEAD_
 
+#include"../../net/InetSocketAddress.h"
+
 namespace zNet{
 
 class SocketChannel{
@@ -10,7 +12,7 @@ public:
 private:
 	int Socketfd;	
 public:
-	void open(int fd);
+	bool Connect(InetSocketAddress& addr);
 };
 
 }
