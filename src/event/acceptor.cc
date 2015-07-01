@@ -1,7 +1,7 @@
 #include"acceptor.h"
 #include<iostream>
 #include<utility>
-zNet::event::acceptor::acceptor(ServerSocketChannel& ssChannel, util::blockqueue<std::shared_ptr<processor>>& bq)
+zNet::event::acceptor::acceptor(ServerSocketChannel& ssChannel, util::blockqueue<std::unique_ptr<processor>>& bq)
 		: ssChannel(ssChannel)
 		, processor_queue(bq)
 {
@@ -19,13 +19,14 @@ void zNet::event::acceptor::cb_accept(ev::io& io_accept, int events)
 {
 	if (!(events & EV_READ))
 		return;
-	std::cout << "cb_accept" << std::endl;
+	//std::cout << "cb_accept" << std::endl;
 	int connfd = ssChannel.Accept();
-	std::cout << "connfds in acceptorqueue: "<< connfd << std::endl;
-	std::shared_ptr<processor> p_processor(new zNet::event::processor(connfd));
-	processor_queue.put(p_processor);
-	std::cout << "put connfd to processor_queue" << std::endl;
-	//zNet::event::processor *pp = new zNet::event::processor(connfd);
+	if (connfd < 0)
+		return;
+	//std::cout << "connfds in acceptorqueue: "<< connfd << std::endl;
+	std::unique_ptr<processor> p_processor(new zNet::event::processor(connfd));
+	processor_queue.put(std::move(p_processor));
+	//std::cout << "put connfd to processor_queue" << std::endl;
 }
 
 

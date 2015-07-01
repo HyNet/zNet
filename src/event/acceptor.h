@@ -13,7 +13,7 @@ namespace zNet{namespace event{
 
 class acceptor{
 public:
-	acceptor(ServerSocketChannel& ssChannel, util::blockqueue<std::shared_ptr<processor>>& bq);
+	acceptor(ServerSocketChannel& ssChannel, util::blockqueue<std::unique_ptr<processor>>& bq);
 	~acceptor();
 	acceptor(const acceptor&) = delete;
 	acceptor& operator= (const acceptor&) = delete;
@@ -25,7 +25,7 @@ private:
 	ev::io 		io_accept;
 	struct ev_loop* accept_loop;
 	ServerSocketChannel& ssChannel;
-	util::blockqueue<std::shared_ptr<processor>>& processor_queue;
+	util::blockqueue<std::unique_ptr<processor>>& processor_queue;
 };
 
 }}

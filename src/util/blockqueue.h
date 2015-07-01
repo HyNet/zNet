@@ -25,10 +25,10 @@ private:
 	std::list<T> queue;
 };
 
-#include"blockqueue.cc"
 
 }}
 
+#include"blockqueue.cc"
 
 #endif //ZNET_UTIL_BLOCKQUEUE_HEAD_H_
 

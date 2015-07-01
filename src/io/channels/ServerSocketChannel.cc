@@ -1,4 +1,5 @@
 #include<sys/socket.h>
+#include <fcntl.h>
 #include<unistd.h>
 #include"ServerSocketChannel.h"
 
@@ -22,6 +23,7 @@ bool ServerSocketChannel::Bind( InetSocketAddress& local, int backlog/*=65535*/)
 		return false;
 	if (0 != bind(ServerSocketfd, local.getsockaddr(), local.getsocklen()))
 		return false;
+	fcntl(ServerSocketfd, F_SETFL, fcntl(ServerSocketfd, F_GETFL, 0) | O_NONBLOCK);
 	if (0 != listen(ServerSocketfd, backlog))
 		return false;
 	return true;

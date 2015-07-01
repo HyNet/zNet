@@ -1,0 +1,32 @@
+
+# Copyright zhao
+
+CC=${CC:-cc}
+CFLAGS="-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g"
+LINK="\$(CC)"
+
+znet_include_opt="-I "
+znet_compile_opt="-c"
+znet_objout="-o "
+znet_binout="-o "
+znet_objext="o"
+znet_binext=
+
+znet_long_start=
+znet_long_end=
+
+#directory seperator
+znet_regex_dirsep="\/"
+znet_dirsep="/"
+
+znet_regex_cont=' \\\
+	'
+znet_cont=' \
+	'
+znet_tab='\
+		'
+znet_spacer=
+
+znet_long_regex_cont=$znet_regex_cont
+znet_long_cont=$znet_cont
+
