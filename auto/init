@@ -1,0 +1,14 @@
+
+# Copyright zhao
+
+ZNET_MAKEFILE=$ZNET_OBJS/Makefile
+
+# create Makefile
+
+cat << END > Makefile
+
+default:	build
+
+clean:
+	rm -rf Makefile $ZNET_OBJS
+END

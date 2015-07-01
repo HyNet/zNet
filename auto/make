@@ -1,0 +1,96 @@
+
+# Copyright zhao
+
+echo -e "creating $ZNET_MAKEFILE"
+
+mkdir -p $ZNET_OBJS/src/core
+
+znet_objs_dir=$ZNET_OBJS$znet_regex_dirsep
+
+cat << END 				> $ZNET_MAKEFILE
+
+CC =		$CC
+CFLAGS = $CFLAGS
+LINK = $LINK
+
+END
+
+# core source code
+#
+znet_all_srcs="$CORE_SRCS"
+#echo $znet_all_srcs
+znet_deps=`echo $CORE_DEPS \
+			|sed -e "s/ *\([^ ][^ ]\)/$znet_reg_cont\1/g" \
+				-e "s/\//$znet_regex_dirsep/g"`
+#echo $znet_deps
+
+znet_incs=`echo $CORE_INCS $ZNET_OBJS \
+    | sed -e "s/  *\([^ ][^ ]*\)/$znet_regex_cont$znet_include_opt\1/g" \
+	          -e "s/\//$znet_regex_dirsep/g"`
+#echo $znet_incs
+
+cat << END 				>> $ZNET_MAKEFILE
+CORE_DEPS = $znet_deps
+
+CORE_INCS = $znet_include_opt$znet_incs
+
+END
+
+# add more source code below
+#
+#
+
+
+
+# znet
+znet_all_srcs=`echo $znet_all_srcs | sed -e "s/\//$znet_regex_dirsep/g"`
+
+znet_all_objs=`echo $znet_all_srcs \
+    | sed -e "s#\([^ ]*\.\)cpp#$ZNET_OBJS\/\1$znet_objext#g" \
+	          -e "s#\([^ ]*\.\)cc#$ZNET_OBJS\/\1$znet_objext#g" \
+			            -e "s#\([^ ]*\.\)c#$ZNET_OBJS\/\1$znet_objext#g" \
+						          -e "s#\([^ ]*\.\)S#$ZNET_OBJS\/\1$znet_objext#g"`
+echo $znet_all_objs
+znet_deps=`echo $znet_all_objs $znet_modules_obj $znet_res $LINK_DEPS \
+    		| sed -e "s/  *\([^ ][^ ]*\)/$znet_regex_cont\1/g" \
+	          	-e "s/\//$znet_regex_dirsep/g"`
+
+echo $znet_deps
+
+znet_objs=`echo $znet_all_objs $znet_modules_obj \
+    | sed -e "s/  *\([^ ][^ ]*\)/$znet_long_regex_cont\1/g" \
+	          -e "s/\//$znet_regex_dirsep/g"`
+
+echo $znet_objs
+cat << END 											>> $ZNET_MAKEFILE
+
+$ZNET_OBJS${znet_dirsep}znet${znet_binext}:	$znet_deps$znet_spacer
+	\$(LINK) ${znet_long_start}${znet_binout}$ZNET_OBJS${znet_dirsep}znet$znet_long_cont$znet_objs$znet_libs$znet_link
+	$znet_rcc
+${znet_long_end}
+
+END
+
+znet_cc="\$(CC) $znet_compile_opt \$(CFLAGS) \$(CORE_INCS)"
+
+# core source
+#
+for znet_src in $CORE_SRCS
+do
+    znet_src=`echo $znet_src | sed -e "s/\//$znet_regex_dirsep/g"`
+    znet_obj=`echo $znet_src \
+        | sed -e "s#^\(.*\.\)cpp\\$#$znet_objs_dir\1$znet_objext#g" \
+              -e "s#^\(.*\.\)cc\\$#$znet_objs_dir\1$znet_objext#g" \
+              -e "s#^\(.*\.\)c\\$#$znet_objs_dir\1$znet_objext#g" \
+              -e "s#^\(.*\.\)S\\$#$znet_objs_dir\1$znet_objext#g"`
+echo $znet_cc
+    cat << END                                                >> $ZNET_MAKEFILE
+
+$znet_obj:	\$(CORE_DEPS)$znet_cont$znet_src
+	$znet_cc$znet_tab$znet_objout$znet_obj$znet_tab$znet_src$NGX_AUX
+
+END
+
+done
+
+
