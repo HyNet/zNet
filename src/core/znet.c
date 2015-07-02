@@ -8,6 +8,7 @@
 
 static int znet_get_options(int argc, char *const *argv);
 
+static void znet_master_process_cycle(void);
 
 static unsigned int		znet_show_help;
 static unsigned int		znet_show_version;
@@ -26,6 +27,7 @@ int main(int argc, char** argv)
 	if (znet_show_help){
 		printf(znet_help_words);
 	}
+	znet_master_process_cycle();
 	return 0;	
 }
 
@@ -74,4 +76,41 @@ static int znet_get_options(int argc, char *const *argv)
 	}
 	
 	return 0;
+}
+
+static void znet_master_process_cycle(void)
+{
+	sigset_t	set;
+	struct itimerval itv;
+
+	sigemptyset(&set);
+	sigaddset(&set, SIGCHLD);
+	sigaddset(&set, SIGALRM);
+	sigaddset(&set, SIGIO);
+	sigaddset(&set, SIGINT);
+	sigaddset(&set, SIGHUP);
+	//sigaddset(&set, SIGUSER1);
+	sigaddset(&set, SIGWINCH);
+	sigaddset(&set, SIGTERM);
+	sigaddset(&set, SIGQUIT);
+	sigaddset(&set, SIGXCPU);
+	
+	sigprocmask(SIG_BLOCK, &set, NULL);
+	sigemptyset(&set);
+
+	//char *title = "master process";
+	//setproctitle("%s", title);
+
+	unsigned int delay = 0;
+	
+	for(;;){
+		itv.it_interval.tv_sec = 0;
+		itv.it_interval.tv_usec = 0;
+		itv.it_value.tv_sec = delay / 1000;
+		itv.it_value.tv_usec = ( delay % 1000 ) * 1000;
+		setitimer(ITIMER_REAL, &itv, NULL);
+		printf("cycle....\n");
+		sigsuspend(&set);
+		printf("cycle after signal...\n");
+	}
 }
