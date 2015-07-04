@@ -11,4 +11,6 @@ default:	build
 
 clean:
 	rm -rf Makefile $ZNET_OBJS
+build:
+	\$(MAKE) -f $ZNET_MAKEFILE
 END
