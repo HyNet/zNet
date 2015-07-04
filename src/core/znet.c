@@ -6,12 +6,12 @@
 #include<znet.h>
 #include<znet_core.h>
 
-static int znet_get_options(int argc, char *const *argv);
+static znet_int_t znet_get_options(int argc, char *const *argv);
 
 static void znet_master_process_cycle(void);
 
-static unsigned int		znet_show_help;
-static unsigned int		znet_show_version;
+static znet_uint_t		znet_show_help;
+static znet_uint_t		znet_show_version;
 static char				*znet_signal;
 
 static char const *znet_help_words = "Usage: nginx [-?h] [-s signal]\n\n \
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 }
 
 
-static int znet_get_options(int argc, char *const *argv)
+static znet_int_t znet_get_options(int argc, char *const *argv)
 {
 	char *p;
 	int i;
@@ -89,11 +89,16 @@ static void znet_master_process_cycle(void)
 	sigaddset(&set, SIGIO);
 	sigaddset(&set, SIGINT);
 	sigaddset(&set, SIGHUP);
-	//sigaddset(&set, SIGUSER1);
-	sigaddset(&set, SIGWINCH);
-	sigaddset(&set, SIGTERM);
-	sigaddset(&set, SIGQUIT);
-	sigaddset(&set, SIGXCPU);
+	sigaddset(&set, znet_signal_value(ZNET_RECONFIGURE_SIGNAL));
+	sigaddset(&set, znet_signal_value(ZNET_REOPEN_SIGNAL));
+	sigaddset(&set, znet_signal_value(ZNET_NOACCEPT_SIGNAL));
+	sigaddset(&set, znet_signal_value(ZNET_TERMINATE_SIGNAL));
+	sigaddset(&set, znet_signal_value(ZNET_SHUTDOWN_SIGNAL));
+	sigaddset(&set, znet_signal_value(ZNET_CHANGEBIN_SIGNAL));
+	//sigaddset(&set, SIGWINCH);
+	//sigaddset(&set, SIGTERM);
+	//sigaddset(&set, SIGQUIT);
+	//sigaddset(&set, SIGXCPU);
 	
 	sigprocmask(SIG_BLOCK, &set, NULL);
 	sigemptyset(&set);
