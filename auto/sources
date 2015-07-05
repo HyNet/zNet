@@ -3,7 +3,10 @@
 
 CORE_INCS="src/core"
 
+#CORE_DEPS="$CORE_INCS/znet.h \
+#			"
 CORE_DEPS="$CORE_INCS/znet.h \
+			$CORE_INCS/znet_core.h \
 			"
 
 CORE_SRCS="$CORE_INCS/znet.c \

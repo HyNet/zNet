@@ -17,13 +17,16 @@ END
 
 # core source code
 #
+#
 znet_all_srcs="$CORE_SRCS"
 #echo $znet_all_srcs
 znet_deps=`echo $CORE_DEPS \
 			|sed -e "s/ *\([^ ][^ ]\)/$znet_reg_cont\1/g" \
 				-e "s/\//$znet_regex_dirsep/g"`
-#echo $znet_deps
-
+echo "--------"
+echo $CORE_DEPS
+echo $znet_deps
+echo "--------"
 znet_incs=`echo $CORE_INCS $ZNET_OBJS \
     | sed -e "s/  *\([^ ][^ ]*\)/$znet_regex_cont$znet_include_opt\1/g" \
 	          -e "s/\//$znet_regex_dirsep/g"`

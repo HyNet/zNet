@@ -3,7 +3,7 @@ CC =		cc
 CFLAGS = -pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g
 LINK = $(CC)
 
-CORE_DEPS = src/core/znet.h
+CORE_DEPS = src/core/znet.hsrc/core/znet_core.h
 
 CORE_INCS = -I src/core \
 	-I objs
