@@ -8,16 +8,18 @@
 
 static znet_int_t znet_get_options(int argc, char *const *argv);
 
-static void znet_master_process_cycle(void);
+//static void znet_master_process_cycle(void);
 
 static znet_uint_t		znet_show_help;
 static znet_uint_t		znet_show_version;
 static char				*znet_signal;
 
-static char const *znet_help_words = "Usage: nginx [-?h] [-s signal]\n\n \
+static char const *znet_help_words = " \
+Usage: nginx [-?h] [-s signal]\n\n \
 Options:\n \
 	-?,-h              :print help message\n \
-	-s signal          :send signal to a master process:stop\n";
+	-s signal          :send signal to a master process:stop\n \
+";
 
 
 int main(int argc, char** argv)
@@ -26,7 +28,9 @@ int main(int argc, char** argv)
 		return 1;
 	if (znet_show_help){
 		printf(znet_help_words);
+		return 0;
 	}
+	znet_init_signals();
 	znet_master_process_cycle();
 	return 0;	
 }
@@ -78,6 +82,7 @@ static znet_int_t znet_get_options(int argc, char *const *argv)
 	return 0;
 }
 
+/*
 static void znet_master_process_cycle(void)
 {
 	sigset_t	set;
@@ -119,3 +124,4 @@ static void znet_master_process_cycle(void)
 		printf("cycle after signal...\n");
 	}
 }
+*/

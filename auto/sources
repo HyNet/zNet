@@ -3,10 +3,35 @@
 
 CORE_INCS="src/core"
 
+#CORE_DEPS="$CORE_INCS/znet.h \
+#			"
 CORE_DEPS="$CORE_INCS/znet.h \
+			$CORE_INCS/znet_core.h \
 			"
+
+#CORE_SRCS="$CORE_INCS/znet.c \
+#			"
 
 CORE_SRCS="$CORE_INCS/znet.c \
 			"
 
+UNIX_INCS="src/os/unix"
 
+UNIX_DEPS="$CORE_DEPS \
+			$UNIX_INCS/znet_process_cycle.h \
+			$UNIX_INCS/znet_process.h \
+			"
+UNIX_SRCS="$CORE_SRCS \
+			$UNIX_INCS/znet_process_cycle.c \
+			$UNIX_INCS/znet_process.c
+			"
+
+CORE_INCS="$CORE_INCS $UNIX_INCS"
+CORE_DEPS=$UNIX_DEPS
+CORE_SRCS=$UNIX_SRCS
+
+#echo "---------"
+#echo $CORE_INCS
+#echo $CORE_DEPS
+#echo $CORE_SRCS
+#echo "---------"
