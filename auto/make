@@ -3,7 +3,8 @@
 
 echo -e "creating $ZNET_MAKEFILE"
 
-mkdir -p $ZNET_OBJS/src/core
+mkdir -p $ZNET_OBJS/src/core \
+		$ZNET_OBJS/src/os/unix
 
 znet_objs_dir=$ZNET_OBJS$znet_regex_dirsep
 
@@ -21,12 +22,14 @@ END
 znet_all_srcs="$CORE_SRCS"
 #echo $znet_all_srcs
 znet_deps=`echo $CORE_DEPS \
-			|sed -e "s/ *\([^ ][^ ]\)/$znet_reg_cont\1/g" \
+			|sed -e "s/ *\([^ ][^ ]*\)/$znet_regex_cont\1/g" \
 				-e "s/\//$znet_regex_dirsep/g"`
-echo "--------"
-echo $CORE_DEPS
-echo $znet_deps
-echo "--------"
+#echo "--------"
+#echo $znet_regex_cont
+#echo $znet_regex_dirsep
+#echo $CORE_DEPS
+#echo $znet_deps
+#echo "--------"
 znet_incs=`echo $CORE_INCS $ZNET_OBJS \
     | sed -e "s/  *\([^ ][^ ]*\)/$znet_regex_cont$znet_include_opt\1/g" \
 	          -e "s/\//$znet_regex_dirsep/g"`
@@ -53,18 +56,18 @@ znet_all_objs=`echo $znet_all_srcs \
 	          -e "s#\([^ ]*\.\)cc#$ZNET_OBJS\/\1$znet_objext#g" \
 			            -e "s#\([^ ]*\.\)c#$ZNET_OBJS\/\1$znet_objext#g" \
 						          -e "s#\([^ ]*\.\)S#$ZNET_OBJS\/\1$znet_objext#g"`
-echo $znet_all_objs
+#echo $znet_all_objs
 znet_deps=`echo $znet_all_objs $znet_modules_obj $znet_res $LINK_DEPS \
     		| sed -e "s/  *\([^ ][^ ]*\)/$znet_regex_cont\1/g" \
 	          	-e "s/\//$znet_regex_dirsep/g"`
 
-echo $znet_deps
+#echo $znet_deps
 
 znet_objs=`echo $znet_all_objs $znet_modules_obj \
     | sed -e "s/  *\([^ ][^ ]*\)/$znet_long_regex_cont\1/g" \
 	          -e "s/\//$znet_regex_dirsep/g"`
 
-echo $znet_objs
+#echo $znet_objs
 cat << END 											>> $ZNET_MAKEFILE
 
 $ZNET_OBJS${znet_dirsep}znet${znet_binext}:	$znet_deps$znet_spacer
@@ -86,7 +89,7 @@ do
               -e "s#^\(.*\.\)cc\\$#$znet_objs_dir\1$znet_objext#g" \
               -e "s#^\(.*\.\)c\\$#$znet_objs_dir\1$znet_objext#g" \
               -e "s#^\(.*\.\)S\\$#$znet_objs_dir\1$znet_objext#g"`
-echo $znet_cc
+#echo $znet_cc
     cat << END                                                >> $ZNET_MAKEFILE
 
 $znet_obj:	\$(CORE_DEPS)$znet_cont$znet_src

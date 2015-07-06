@@ -17,13 +17,13 @@ znet_long_end=
 
 #directory seperator
 znet_regex_dirsep="\/"
-znet_dirsep="/"
+znet_dirsep='/'
 
 znet_regex_cont=' \\\
 	'
 znet_cont=' \
 	'
-znet_tab='\
+znet_tab=' \
 		'
 znet_spacer=
 
