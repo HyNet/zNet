@@ -22,6 +22,9 @@
 #define znet_signal_helper(n)	SIG##n
 #define znet_signal_value(n)	znet_signal_helper(n)
 
+#define znet_value_helper(n)	#n
+#define znet_value(n)	znet_value_helper(n)
+
 #define ZNET_SHUTDOWN_SIGNAL      QUIT
 #define ZNET_TERMINATE_SIGNAL     TERM
 #define ZNET_NOACCEPT_SIGNAL      WINCH
