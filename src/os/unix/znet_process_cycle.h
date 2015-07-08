@@ -10,4 +10,7 @@
 
 void znet_master_process_cycle(void);
 
+
+extern sig_atomic_t znet_terminate;
+
 #endif /*_ZNET_PROCESS_CYCLE_H_INCLUDED_*/

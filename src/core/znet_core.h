@@ -14,6 +14,7 @@
 #include<sys/types.h>
 #include<unistd.h>
 #include<stdint.h>
+#include<stdlib.h>
 
 #include<znet_process.h>
 #include<znet_process_cycle.h>

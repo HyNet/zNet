@@ -3,8 +3,9 @@
  * Copyright (C) zhao
  */
 
-#include<znet_process_cycle.h>
+#include<znet_core.h>
 
+sig_atomic_t znet_terminate;
 
 void znet_master_process_cycle(void)
 {
@@ -36,6 +37,10 @@ void znet_master_process_cycle(void)
 		setitimer(ITIMER_REAL, &itv, NULL);
 		printf("cycle....\n");
 		sigsuspend(&set);
+		if (znet_terminate){
+			printf("stop cycle..\n");
+			exit(0);
+		}
 		printf("cycle after signal...\n");
 	}
 }
