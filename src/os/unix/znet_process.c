@@ -40,5 +40,12 @@ int znet_init_signals(void)
 void 
 znet_signal_handler(int signo)
 {
+	switch(signo){
+	case znet_signal_value(ZNET_TERMINATE_SIGNAL):
+		znet_terminate = 1;
+		break;
+	default:
+		break;
+	}	
 	printf("signal handler.\n");
 }
