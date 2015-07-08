@@ -15,6 +15,7 @@
 #include<unistd.h>
 #include<stdint.h>
 #include<stdlib.h>
+#include<fcntl.h>
 
 #include<znet_process.h>
 #include<znet_process_cycle.h>

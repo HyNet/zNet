@@ -7,7 +7,7 @@
 #include<znet_core.h>
 
 static znet_int_t znet_get_options(int argc, char *const *argv);
-
+static znet_int_t znet_create_pidfile(void);
 //static void znet_master_process_cycle(void);
 
 static znet_uint_t		znet_show_help;
@@ -30,6 +30,8 @@ int main(int argc, char** argv)
 		printf(znet_help_words);
 		return 0;
 	}
+	znet_pid = getpid();
+	znet_create_pidfile();
 	znet_init_signals();
 	znet_master_process_cycle();
 	return 0;	
@@ -82,6 +84,20 @@ static znet_int_t znet_get_options(int argc, char *const *argv)
 	return 0;
 }
 
+znet_int_t 
+znet_create_pidfile(void)
+{
+	char pid[1024];
+	int len = 0;
+	len = snprintf(pid, sizeof(pid), "%d", znet_pid);
+	printf("%d\n",len);
+	int fd = open("znetpid", O_RDWR|O_CREAT|O_TRUNC, 0644);
+	if (write(fd, pid, len) == -1 ){
+		return -1;
+	}
+	close(fd);
+	return 0;
+}
 /*
 static void znet_master_process_cycle(void)
 {

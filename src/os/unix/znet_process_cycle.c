@@ -6,6 +6,7 @@
 #include<znet_core.h>
 
 sig_atomic_t znet_terminate;
+znet_pid_t znet_pid;
 
 void znet_master_process_cycle(void)
 {
