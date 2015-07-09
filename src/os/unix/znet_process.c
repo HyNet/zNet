@@ -22,7 +22,8 @@ znet_signal_t signals[]={
 	{ 0, NULL, "", NULL }
 };
 
-int znet_init_signals(void)
+znet_int_t 
+znet_init_signals(void)
 {
 	znet_signal_t *sig;
 	struct sigaction sa;
@@ -49,3 +50,20 @@ znet_signal_handler(int signo)
 	}	
 	printf("signal handler.\n");
 }
+
+
+znet_int_t 
+znet_os_signal_process(char *sig, znet_int_t pid)
+{
+	znet_signal_t *psig;
+	
+	for(psig = signals; psig != 0; psig++) {
+		if (strcmp(sig, signals->name) == 0) {
+			if (kill(pid, psig->signo) != -1) 
+				return 0;
+		}
+	}
+	
+	return 1;
+}
+

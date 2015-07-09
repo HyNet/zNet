@@ -8,6 +8,8 @@
 
 static znet_int_t znet_get_options(int argc, char *const *argv);
 static znet_int_t znet_create_pidfile(void);
+static znet_int_t znet_signal_process(char *sig);
+
 //static void znet_master_process_cycle(void);
 
 static znet_uint_t		znet_show_help;
@@ -29,6 +31,9 @@ int main(int argc, char** argv)
 	if (znet_show_help){
 		printf(znet_help_words);
 		return 0;
+	}
+	if (znet_signal) {
+		return znet_signal_process(znet_signal);
 	}
 	znet_pid = getpid();
 	znet_create_pidfile();
@@ -98,6 +103,23 @@ znet_create_pidfile(void)
 	close(fd);
 	return 0;
 }
+
+znet_int_t 
+znet_signal_process(char *sig)
+{
+	znet_int_t pid;
+	char buf[1024];
+
+	int fd = open("znetpid", O_RDONLY, 0644);
+	ssize_t n = read(fd, buf, 1024);
+	close(fd);
+	if ( n == -1)
+		return 0;
+	pid = atoi(buf);
+	
+	return znet_os_signal_process(sig,pid);
+}
+
 /*
 static void znet_master_process_cycle(void)
 {

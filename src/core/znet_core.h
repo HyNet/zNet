@@ -17,6 +17,11 @@
 #include<stdlib.h>
 #include<fcntl.h>
 
+
+typedef intptr_t	znet_int_t;
+typedef uintptr_t	znet_uint_t;
+typedef intptr_t 	znet_flag_t;
+
 #include<znet_process.h>
 #include<znet_process_cycle.h>
 
@@ -36,8 +41,5 @@
 #define ZNET_CHANGEBIN_SIGNAL     USR2
 
 
-typedef intptr_t	znet_int_t;
-typedef uintptr_t	znet_uint_t;
-typedef intptr_t 	znet_flag_t;
 
 #endif /*_ZNET_CORE_H_INCLUDED_*/
