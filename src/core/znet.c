@@ -126,6 +126,8 @@ znet_signal_process(char *sig)
 znet_int_t 
 znet_save_argv(int argc, char *const *argv)
 {
+	znet_os_argv = (char **)argv;
+	znet_argc = argc;
 	return 0;
 }
 

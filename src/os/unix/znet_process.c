@@ -15,7 +15,7 @@ typedef struct {
 static void znet_signal_handler(int signo);
 
 int znet_argc;
-char **znet_argv;
+char **znet_os_argv;
 
 
 znet_signal_t signals[]={
