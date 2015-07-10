@@ -9,6 +9,7 @@
 static znet_int_t znet_get_options(int argc, char *const *argv);
 static znet_int_t znet_create_pidfile(void);
 static znet_int_t znet_signal_process(char *sig);
+static znet_int_t znet_save_argv(int argc, char *const *argv);
 
 //static void znet_master_process_cycle(void);
 
@@ -36,6 +37,7 @@ int main(int argc, char** argv)
 		return znet_signal_process(znet_signal);
 	}
 	znet_pid = getpid();
+	znet_save_argv(argc, argv);
 	znet_create_pidfile();
 	znet_init_signals();
 	znet_master_process_cycle();
@@ -118,6 +120,13 @@ znet_signal_process(char *sig)
 	pid = atoi(buf);
 	
 	return znet_os_signal_process(sig,pid);
+}
+
+
+znet_int_t 
+znet_save_argv(int argc, char *const *argv)
+{
+	return 0;
 }
 
 /*

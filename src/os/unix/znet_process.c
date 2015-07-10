@@ -14,6 +14,10 @@ typedef struct {
 
 static void znet_signal_handler(int signo);
 
+int znet_argc;
+char **znet_argv;
+
+
 znet_signal_t signals[]={
 	{znet_signal_value(ZNET_TERMINATE_SIGNAL),
 	"SIG"znet_value(ZNET_TERMINATE_SIGNAL),
