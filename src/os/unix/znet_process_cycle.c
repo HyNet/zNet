@@ -5,11 +5,16 @@
 
 #include<znet_core.h>
 
+static void znet_worker_process_cycle(void);
+
 sig_atomic_t znet_terminate;
 znet_pid_t znet_pid;
 
+static char master_process[] = "master process";
+
 void znet_master_process_cycle(void)
 {
+	//char *title;
 	sigset_t    set;
 	struct itimerval itv;
 
@@ -27,6 +32,9 @@ void znet_master_process_cycle(void)
 	
 	sigprocmask(SIG_BLOCK, &set, NULL);
 	sigemptyset(&set);
+	
+	znet_setproctitle(master_process);
+
 	unsigned int delay = 0;
 	
 	for(;;){
@@ -47,5 +55,15 @@ void znet_master_process_cycle(void)
 }
 
 
-
+void znet_worker_process_cycle(void)
+{
+	znet_setproctitle("worker process");
+	for(;;){
+		printf("worker cycle...\n");
+		if (znet_terminate){
+			printf("stop worker cycle...\n");
+			exit(0);
+		}
+	}
+}
 

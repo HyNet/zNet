@@ -15,6 +15,7 @@
 #include<unistd.h>
 #include<stdint.h>
 #include<stdlib.h>
+#include<stdio.h>
 #include<fcntl.h>
 
 
@@ -22,6 +23,8 @@ typedef intptr_t	znet_int_t;
 typedef uintptr_t	znet_uint_t;
 typedef intptr_t 	znet_flag_t;
 
+#include<znet_string.h>
+#include<znet_setproctitle.h>
 #include<znet_process.h>
 #include<znet_process_cycle.h>
 
