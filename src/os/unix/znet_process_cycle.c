@@ -6,6 +6,7 @@
 #include<znet_core.h>
 
 static void znet_worker_process_cycle(void);
+static void znet_start_worker_process(znet_int_t n);
 
 sig_atomic_t znet_terminate;
 znet_pid_t znet_pid;
@@ -34,6 +35,8 @@ void znet_master_process_cycle(void)
 	sigemptyset(&set);
 	
 	znet_setproctitle(master_process);
+
+	znet_start_worker_process(2);
 
 	unsigned int delay = 0;
 	
@@ -67,3 +70,13 @@ void znet_worker_process_cycle(void)
 	}
 }
 
+
+void 
+znet_start_worker_process(znet_int_t n)
+{
+	znet_int_t i;
+	for (i = 0; i < n; i++) {
+		//znet spawn process
+		znet_spawn_process(znet_worker_process_cycle, "worker process");
+	}
+}
