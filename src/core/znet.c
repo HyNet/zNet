@@ -17,6 +17,8 @@ static znet_uint_t		znet_show_help;
 static znet_uint_t		znet_show_version;
 static char				*znet_signal;
 
+extern char **environ;
+
 static char const *znet_help_words = " \
 Usage: nginx [-?h] [-s signal]\n\n \
 Options:\n \
@@ -38,6 +40,7 @@ int main(int argc, char** argv)
 	}
 	znet_pid = getpid();
 	znet_save_argv(argc, argv);
+	znet_init_setproctitle();
 	znet_create_pidfile();
 	znet_init_signals();
 	znet_master_process_cycle();
@@ -97,7 +100,6 @@ znet_create_pidfile(void)
 	char pid[1024];
 	int len = 0;
 	len = snprintf(pid, sizeof(pid), "%d", znet_pid);
-	printf("%d\n",len);
 	int fd = open("znetpid", O_RDWR|O_CREAT|O_TRUNC, 0644);
 	if (write(fd, pid, len) == -1 ){
 		return -1;

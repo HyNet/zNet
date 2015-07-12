@@ -7,12 +7,14 @@ CORE_INCS="src/core"
 #			"
 CORE_DEPS="$CORE_INCS/znet.h \
 			$CORE_INCS/znet_core.h \
+			$CORE_INCS/znet_string.h \
 			"
 
 #CORE_SRCS="$CORE_INCS/znet.c \
 #			"
 
 CORE_SRCS="$CORE_INCS/znet.c \
+			$CORE_INCS/znet_string.c \
 			"
 
 UNIX_INCS="src/os/unix"
@@ -20,10 +22,12 @@ UNIX_INCS="src/os/unix"
 UNIX_DEPS="$CORE_DEPS \
 			$UNIX_INCS/znet_process_cycle.h \
 			$UNIX_INCS/znet_process.h \
+			$UNIX_INCS/znet_setproctitle.h \
 			"
 UNIX_SRCS="$CORE_SRCS \
 			$UNIX_INCS/znet_process_cycle.c \
-			$UNIX_INCS/znet_process.c
+			$UNIX_INCS/znet_process.c \
+			$UNIX_INCS/znet_setproctitle.c \
 			"
 
 CORE_INCS="$CORE_INCS $UNIX_INCS"

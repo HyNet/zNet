@@ -71,3 +71,12 @@ znet_os_signal_process(char *sig, znet_int_t pid)
 	return 1;
 }
 
+
+
+znet_pid_t 
+znet_spawn_process(znet_spawn_proc_pt proc, char *name)
+{
+	printf("znet spawn worker process\n");
+	return -1;
+}
+
