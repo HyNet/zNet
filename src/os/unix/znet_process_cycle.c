@@ -36,7 +36,7 @@ void znet_master_process_cycle(void)
 	
 	znet_setproctitle(master_process);
 
-	znet_start_worker_process(2);
+	znet_start_worker_process(1);
 
 	unsigned int delay = 0;
 	
@@ -67,6 +67,8 @@ void znet_worker_process_cycle(void)
 			printf("stop worker cycle...\n");
 			exit(0);
 		}
+		sleep(10);
+		exit(0);
 	}
 }
 

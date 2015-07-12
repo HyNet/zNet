@@ -77,6 +77,18 @@ znet_pid_t
 znet_spawn_process(znet_spawn_proc_pt proc, char *name)
 {
 	printf("znet spawn worker process\n");
-	return -1;
+	znet_pid_t pid;
+	
+	pid = fork();
+	switch(pid){
+	
+	case 0:
+		proc();
+		break;
+	default:
+		break;
+	}
+	
+	return pid;
 }
 
