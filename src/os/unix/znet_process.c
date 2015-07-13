@@ -13,6 +13,7 @@ typedef struct {
 } znet_signal_t;
 
 static void znet_signal_handler(int signo);
+static void znet_process_get_status(void);
 
 int znet_argc;
 char **znet_os_argv;
@@ -23,6 +24,9 @@ znet_signal_t signals[]={
 	"SIG"znet_value(ZNET_TERMINATE_SIGNAL),
 	"stop",
 	znet_signal_handler},
+
+	{ SIGCHLD, "SIGCHLD", "", znet_signal_handler  },
+
 	{ 0, NULL, "", NULL }
 };
 
@@ -45,14 +49,17 @@ znet_init_signals(void)
 void 
 znet_signal_handler(int signo)
 {
+	printf("signal handler.\n");
 	switch(signo){
 	case znet_signal_value(ZNET_TERMINATE_SIGNAL):
 		znet_terminate = 1;
 		break;
+	case SIGCHLD:
+		znet_process_get_status();
+		break;
 	default:
 		break;
 	}	
-	printf("signal handler.\n");
 }
 
 
@@ -92,3 +99,26 @@ znet_spawn_process(znet_spawn_proc_pt proc, char *name)
 	return pid;
 }
 
+static void 
+znet_process_get_status(void)
+{
+	int status;
+	znet_pid_t pid;
+	int err;
+	printf("znet process get status.\n");
+	for(;;){
+		pid = waitpid(-1, &status, WNOHANG);
+		printf("znet process waitpid %d\n", pid);
+		if (0 == pid){
+			return;
+		}
+		if (pid == -1) {
+			err = errno;
+			if (err == EINTR){
+				continue;
+			}
+			return;
+		}
+	}	
+	return;
+}
