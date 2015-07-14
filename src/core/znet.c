@@ -3,7 +3,6 @@
  * Copyright zhao
  */
 
-#include<znet.h>
 #include<znet_core.h>
 
 static znet_int_t znet_get_options(int argc, char *const *argv);
@@ -107,6 +106,12 @@ znet_create_pidfile(void)
 	close(fd);
 	return 0;
 }
+
+void znet_delete_pidfile(void)
+{
+	unlink("znetpid");
+}
+
 
 znet_int_t 
 znet_signal_process(char *sig)

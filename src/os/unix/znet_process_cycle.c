@@ -7,6 +7,8 @@
 
 static void znet_worker_process_cycle(void);
 static void znet_start_worker_process(znet_int_t n);
+static void znet_master_process_exit(void);
+
 
 sig_atomic_t znet_terminate;
 znet_pid_t znet_pid;
@@ -51,12 +53,18 @@ void znet_master_process_cycle(void)
 		sigsuspend(&set);
 		if (znet_terminate){
 			printf("stop cycle..\n");
-			exit(0);
+			znet_master_process_exit();	
 		}
 		printf("cycle after signal...\n");
 	}
 }
 
+static void 
+znet_master_process_exit(void)
+{
+	znet_delete_pidfile();
+	exit(0);
+}
 
 void znet_worker_process_cycle(void)
 {

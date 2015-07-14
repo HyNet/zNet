@@ -25,6 +25,7 @@ typedef intptr_t	znet_int_t;
 typedef uintptr_t	znet_uint_t;
 typedef intptr_t 	znet_flag_t;
 
+#include<znet.h>
 #include<znet_string.h>
 #include<znet_setproctitle.h>
 #include<znet_process.h>
