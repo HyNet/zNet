@@ -6,6 +6,8 @@
 #ifndef _ZNET_PROCESS_H_INCLUDED_
 #define _ZNET_PROCESS_H_INCLUDED_
 
+#define ZNET_MAX_PROCESS 1024
+
 typedef pid_t znet_pid_t;
 
 typedef void(*znet_spawn_proc_pt)(void);
