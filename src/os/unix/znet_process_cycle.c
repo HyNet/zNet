@@ -85,6 +85,9 @@ void
 znet_start_worker_process(znet_int_t n)
 {
 	znet_int_t i;
+	znet_channel_t ch;
+	memset(&ch, 0, sizeof(znet_channel_t));
+	ch.command = ZNET_CMD_OPEN_CHANNEL;	
 	for (i = 0; i < n; i++) {
 		//znet spawn process
 		znet_spawn_process(znet_worker_process_cycle, "worker process");

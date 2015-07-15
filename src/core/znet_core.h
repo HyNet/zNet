@@ -30,6 +30,7 @@ typedef intptr_t 	znet_flag_t;
 #include<znet_setproctitle.h>
 #include<znet_process.h>
 #include<znet_process_cycle.h>
+#include<znet_channel.h>
 
 
 #define znet_signal_helper(n)	SIG##n

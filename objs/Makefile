@@ -9,7 +9,8 @@ CORE_DEPS =  \
 	src/core/znet_string.h \
 	src/os/unix/znet_process_cycle.h \
 	src/os/unix/znet_process.h \
-	src/os/unix/znet_setproctitle.h
+	src/os/unix/znet_setproctitle.h \
+	src/os/unix/znet_channel.h
 
 CORE_INCS = -I src/core \
 	-I src/os/unix \
@@ -20,13 +21,15 @@ objs/znet:	objs/src/core/znet.o \
 	objs/src/core/znet_string.o \
 	objs/src/os/unix/znet_process_cycle.o \
 	objs/src/os/unix/znet_process.o \
-	objs/src/os/unix/znet_setproctitle.o
+	objs/src/os/unix/znet_setproctitle.o \
+	objs/src/os/unix/znet_channel.o
 	$(LINK) -o objs/znet \
 	objs/src/core/znet.o \
 	objs/src/core/znet_string.o \
 	objs/src/os/unix/znet_process_cycle.o \
 	objs/src/os/unix/znet_process.o \
-	objs/src/os/unix/znet_setproctitle.o
+	objs/src/os/unix/znet_setproctitle.o \
+	objs/src/os/unix/znet_channel.o
 	
 
 
@@ -64,4 +67,11 @@ objs/src/os/unix/znet_setproctitle.o:	$(CORE_DEPS) \
 	$(CC) -c $(CFLAGS) $(CORE_INCS) \
 		-o objs/src/os/unix/znet_setproctitle.o \
 		src/os/unix/znet_setproctitle.c
+
+
+objs/src/os/unix/znet_channel.o:	$(CORE_DEPS) \
+	src/os/unix/znet_channel.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) \
+		-o objs/src/os/unix/znet_channel.o \
+		src/os/unix/znet_channel.c
 

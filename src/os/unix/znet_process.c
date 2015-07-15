@@ -18,6 +18,9 @@ static void znet_process_get_status(void);
 int znet_argc;
 char **znet_os_argv;
 
+znet_int_t znet_process_slot;
+znet_int_t znet_last_process;
+znet_process_t znet_processes[ZNET_MAX_PROCESSES];
 
 znet_signal_t signals[]={
 	{znet_signal_value(ZNET_TERMINATE_SIGNAL),
