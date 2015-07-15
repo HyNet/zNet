@@ -8,6 +8,12 @@
 
 #include<znet_core.h>
 
+#define ZNET_CMD_OPEN_CHANNEL 1
+#define ZNET_CMD_CLOSE_CHANNEL 2
+#define ZNET_CMD_QUIT			3
+#define ZNET_CMD_TERMINATE		4
+#define ZNET_CMD_REOPEN			5
+
 void znet_master_process_cycle(void);
 
 
