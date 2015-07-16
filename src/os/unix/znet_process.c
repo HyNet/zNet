@@ -87,8 +87,25 @@ znet_pid_t
 znet_spawn_process(znet_spawn_proc_pt proc, char *name)
 {
 	printf("znet spawn worker process\n");
+	znet_int_t s;
 	znet_pid_t pid;
+
+	for(s = 0; s < znet_last_process; s++){
+		if(znet_processes[s].pid == -1){
+			break;
+		}
+	}
 	
+	if (s == ZNET_MAX_PROCESSES){
+		return ZNET_INVALID_PID;
+	}
+
+	if (socketpair(AF_UNIX, SOCK_STREAM, 0, znet_processes[s].channel) == -1){
+		return ZNET_INVALID_PID;
+	}
+	
+	znet_process_slot = s;
+		
 	pid = fork();
 	switch(pid){
 	
@@ -97,6 +114,13 @@ znet_spawn_process(znet_spawn_proc_pt proc, char *name)
 		break;
 	default:
 		break;
+	}
+
+	znet_processes[s].pid = pid;
+	znet_processes[s].proc = proc;
+
+	if (s == znet_last_process) {
+		znet_last_process++;
 	}
 	
 	return pid;

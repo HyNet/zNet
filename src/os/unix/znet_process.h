@@ -30,5 +30,11 @@ znet_pid_t znet_spawn_process(znet_spawn_proc_pt proc, char *name);
 extern int znet_argc;
 extern char **znet_os_argv;
 
+extern znet_pid_t znet_pid;
+extern int		znet_channel;
+extern znet_int_t znet_process_slot;
+extern znet_int_t znet_last_process;
+extern znet_process_t znet_processes[ZNET_MAX_PROCESSES];
+
 #endif /*_ZNET_PROCESS_H_INCLUDED_*/
 

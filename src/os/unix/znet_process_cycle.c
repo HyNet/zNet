@@ -8,7 +8,7 @@
 static void znet_worker_process_cycle(void);
 static void znet_start_worker_process(znet_int_t n);
 static void znet_master_process_exit(void);
-
+static void znet_pass_open_channel(znet_channel_t *ch);
 
 sig_atomic_t znet_terminate;
 znet_pid_t znet_pid;
@@ -91,5 +91,24 @@ znet_start_worker_process(znet_int_t n)
 	for (i = 0; i < n; i++) {
 		//znet spawn process
 		znet_spawn_process(znet_worker_process_cycle, "worker process");
+		ch.pid = znet_processes[znet_process_slot].pid;
+		ch.slot = znet_process_slot;
+		ch.fd = znet_processes[znet_process_slot].channel[0];
+		znet_pass_open_channel(&ch);
+	}
+}
+
+static void 
+znet_pass_open_channel(znet_channel_t *ch)
+{
+	znet_int_t i;
+	for (i = 0; i < znet_last_process; i++){
+		if (i == znet_process_slot
+			|| znet_processes[i].pid == -1
+			|| znet_processes[i].channel[0] == -1)
+		{
+			continue;
+		}
+		// znet_write_channel
 	}
 }
