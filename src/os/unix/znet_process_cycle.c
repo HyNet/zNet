@@ -9,6 +9,7 @@ static void znet_worker_process_cycle(void);
 static void znet_start_worker_process(znet_int_t n);
 static void znet_master_process_exit(void);
 static void znet_pass_open_channel(znet_channel_t *ch);
+static znet_uint_t znet_reap_children(void);
 
 sig_atomic_t znet_terminate;
 znet_pid_t znet_pid;
@@ -53,6 +54,7 @@ void znet_master_process_cycle(void)
 		sigsuspend(&set);
 		if (znet_terminate){
 			printf("stop cycle..\n");
+			znet_reap_children();
 			znet_master_process_exit();	
 		}
 		printf("cycle after signal...\n");
@@ -96,6 +98,23 @@ znet_start_worker_process(znet_int_t n)
 		ch.fd = znet_processes[znet_process_slot].channel[0];
 		znet_pass_open_channel(&ch);
 	}
+}
+
+static znet_uint_t 
+znet_reap_children(void)
+{
+	znet_int_t		i;
+	znet_channel_t ch;
+	memset(&ch, 0, sizeof(znet_channel_t));
+	
+	ch.command = ZNET_CMD_CLOSE_CHANNEL;
+	ch.fd = -1;
+	
+	for(i = 0; i < znet_last_process; i++){
+		if(znet_processes[i].pid == -1)
+			continue;
+	}
+	return 0;
 }
 
 static void 
