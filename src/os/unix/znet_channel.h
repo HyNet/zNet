@@ -15,4 +15,11 @@ typedef struct {
 	int			fd;
 }znet_channel_t;
 
+
+znet_int_t znet_write_channel(znet_socket_t s, znet_channel_t *ch, size_t size);
+znet_int_t znet_read_channel (znet_socket_t s, znet_channel_t *ch, size_t size);
+void znet_close_channel(int *fd);
+
+
+
 #endif /*_ZNET_CHANNEL_H_INCLUDED_*/
