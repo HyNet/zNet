@@ -16,6 +16,8 @@ typedef struct {
 	znet_int_t (*add)(znet_event_t *ev, znet_int_t event, znet_uint_t flags);
 	znet_int_t (*del)(znet_event_t *ev, znet_int_t event, znet_uint_t flags);
 	znet_int_t (*process_events)(znet_uint_t flags);
+	znet_int_t  (*init)(void);
+	void (*done)(void);
 }znet_event_actions_t;
 
 extern znet_event_actions_t znet_event_actions;
