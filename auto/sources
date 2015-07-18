@@ -25,6 +25,7 @@ UNIX_DEPS="$CORE_DEPS \
 			$UNIX_INCS/znet_setproctitle.h \
 			$UNIX_INCS/znet_channel.h \
 			$UNIX_INCS/znet_event.h \
+			$UNIX_INCS/znet_socket.h \
 			"
 UNIX_SRCS="$CORE_SRCS \
 			$UNIX_INCS/znet_process_cycle.c \
@@ -32,6 +33,7 @@ UNIX_SRCS="$CORE_SRCS \
 			$UNIX_INCS/znet_setproctitle.c \
 			$UNIX_INCS/znet_channel.c \
 			$UNIX_INCS/znet_event.c \
+			$UNIX_INCS/znet_socket.c \
 			"
 
 CORE_INCS="$CORE_INCS $UNIX_INCS"
