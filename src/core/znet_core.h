@@ -15,6 +15,7 @@
 #include<sys/socket.h>
 #include<sys/epoll.h>
 #include<sys/wait.h>
+#include<sys/ioctl.h>
 #include<errno.h>
 #include<unistd.h>
 #include<stdint.h>
