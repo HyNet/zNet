@@ -19,6 +19,7 @@ int znet_argc;
 char **znet_os_argv;
 
 znet_int_t znet_process_slot;
+znet_socket_t znet_channel;
 znet_int_t znet_last_process;
 znet_process_t znet_processes[ZNET_MAX_PROCESSES];
 
@@ -104,6 +105,46 @@ znet_spawn_process(znet_spawn_proc_pt proc, char *name)
 		return ZNET_INVALID_PID;
 	}
 	
+	if (znet_nonblocking(znet_processes[s].channel[0]) == -1) {
+        printf(" failed while spawning \"%s\"", name);
+        znet_close_channel(znet_processes[s].channel);
+        return ZNET_INVALID_PID;
+    }
+	
+	if (znet_nonblocking(znet_processes[s].channel[1]) == -1) {
+		printf(" failed while spawning \"%s\"", name);
+		znet_close_channel(znet_processes[s].channel);
+		return ZNET_INVALID_PID;
+	}
+
+	u_long on = 1;
+	
+	if (ioctl(znet_processes[s].channel[0], FIOASYNC, &on) == -1) {
+		printf("ioctl(FIOASYNC) failed while spawning \"%s\"", name);
+		znet_close_channel(znet_processes[s].channel);
+		return ZNET_INVALID_PID;
+	}
+	
+	if (fcntl(znet_processes[s].channel[0], F_SETOWN, znet_pid) == -1) {
+		printf("fcntl(F_SETOWN) failed while spawning \"%s\"", name);
+		znet_close_channel(znet_processes[s].channel);
+		return ZNET_INVALID_PID;
+	}
+	
+	if (fcntl(znet_processes[s].channel[0], F_SETFD, FD_CLOEXEC) == -1) {
+		printf("fcntl(FD_CLOEXEC) failed while spawning \"%s\"", name);
+		znet_close_channel(znet_processes[s].channel);
+		return ZNET_INVALID_PID;
+	}
+
+	if (fcntl(znet_processes[s].channel[0], F_SETFD, FD_CLOEXEC) == -1) {
+		printf("fcntl(FD_CLOEXEC) failed while spawning \"%s\"", name);
+		znet_close_channel(znet_processes[s].channel);
+		return ZNET_INVALID_PID;
+	}
+	
+	znet_channel = znet_processes[s].channel[1];
+	
 	znet_process_slot = s;
 		
 	pid = fork();
@@ -118,6 +159,7 @@ znet_spawn_process(znet_spawn_proc_pt proc, char *name)
 
 	znet_processes[s].pid = pid;
 	znet_processes[s].proc = proc;
+	znet_processes[s].respawn = 1;
 
 	if (s == znet_last_process) {
 		znet_last_process++;
