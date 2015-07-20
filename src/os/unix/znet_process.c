@@ -159,6 +159,7 @@ znet_spawn_process(znet_spawn_proc_pt proc, char *name)
 
 	znet_processes[s].pid = pid;
 	znet_processes[s].proc = proc;
+	znet_processes[s].respawn = 1;
 
 	if (s == znet_last_process) {
 		znet_last_process++;

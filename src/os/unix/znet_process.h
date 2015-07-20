@@ -12,6 +12,8 @@
 
 typedef pid_t znet_pid_t;
 
+#define ZNET_INVALID_PID -1
+
 typedef void(*znet_spawn_proc_pt)(void);
 
 typedef struct {
@@ -19,6 +21,12 @@ typedef struct {
 	int			status;
 	int			channel[2];
 	znet_spawn_proc_pt proc;
+	void		*data;
+	char		*name;
+	
+	unsigned	respawn:1;
+	unsigned	exiting:1;
+	unsigned	exited:1;
 } znet_process_t;
 
 
