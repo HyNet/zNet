@@ -174,19 +174,32 @@ znet_process_get_status(void)
 	int status;
 	znet_pid_t pid;
 	int err;
+	znet_int_t	i;
+
 	printf("znet process get status.\n");
 	for(;;){
 		pid = waitpid(-1, &status, WNOHANG);
 		printf("znet process waitpid %d\n", pid);
+		
 		if (0 == pid){
 			return;
 		}
+		
 		if (pid == -1) {
 			err = errno;
 			if (err == EINTR){
 				continue;
 			}
 			return;
+		}
+
+		
+		for(i = 0; i < znet_last_process; i++) {
+			if(znet_processes[i].pid == pid){
+				znet_processes[i].status = status;
+				znet_processes[i].exited = 1;
+				break;	
+			}
 		}
 	}	
 	return;
