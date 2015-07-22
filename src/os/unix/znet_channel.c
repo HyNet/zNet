@@ -114,7 +114,7 @@ znet_read_channel(znet_socket_t s, znet_channel_t *ch, size_t size)
     }
 
     if (msg.msg_flags & (MSG_TRUNC|MSG_CTRUNC)) {
-		printf("recvmsg() truncated data");
+		printf("recvmsg() truncated data\n");
     }
 	
 	return n;
@@ -125,11 +125,11 @@ znet_read_channel(znet_socket_t s, znet_channel_t *ch, size_t size)
 void znet_close_channel(int *fd)
 {
 	if (close(fd[0]) == -1) {
-        printf("close() channel failed");
+        printf("close() channel failed\n");
     }
 
     if (close(fd[1]) == -1) {
-        printf("close() channel failed");
+        printf("close() channel failed\n");
     }
 }
 
