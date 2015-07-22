@@ -6,12 +6,14 @@
 #include<znet_core.h>
 
 static void znet_worker_process_cycle(void);
+static void znet_worker_process_exit(void);
 static void znet_start_worker_process(znet_int_t n);
 static void znet_master_process_exit(void);
 static void znet_pass_open_channel(znet_channel_t *ch);
 static znet_uint_t znet_reap_children(void);
 
 sig_atomic_t znet_terminate;
+sig_atomic_t znet_reap;
 znet_pid_t znet_pid;
 
 static char master_process[] = "master process";
@@ -54,8 +56,13 @@ void znet_master_process_cycle(void)
 		sigsuspend(&set);
 		if (znet_terminate){
 			printf("stop cycle..\n");
-			znet_reap_children();
 			znet_master_process_exit();	
+		}
+		if (znet_reap){
+			printf("reap worker process\n");
+			znet_reap = 0;
+			znet_reap_children();
+			
 		}
 		printf("cycle after signal...\n");
 	}
@@ -75,13 +82,20 @@ void znet_worker_process_cycle(void)
 		printf("worker cycle...\n");
 		if (znet_terminate){
 			printf("stop worker cycle...\n");
-			exit(0);
+			znet_worker_process_exit();
 		}
 		sleep(10);
-		exit(0);
+		znet_worker_process_exit();
 	}
 }
 
+
+static void 
+znet_worker_process_exit(void)
+{
+	printf("exit worker process\n");
+	exit(0);
+}
 
 void 
 znet_start_worker_process(znet_int_t n)
@@ -103,7 +117,7 @@ znet_start_worker_process(znet_int_t n)
 static znet_uint_t 
 znet_reap_children(void)
 {
-	znet_int_t		i;
+	znet_int_t		i, n;
 	znet_channel_t ch;
 	memset(&ch, 0, sizeof(znet_channel_t));
 	
@@ -113,6 +127,38 @@ znet_reap_children(void)
 	for(i = 0; i < znet_last_process; i++){
 		if(znet_processes[i].pid == -1)
 			continue;
+		if(znet_processes[i].exited){
+			znet_close_channel(znet_processes[i].channel);
+			znet_processes[i].channel[0] = -1;
+			znet_processes[i].channel[1] = -1;
+			
+			ch.pid = znet_processes[i].pid;
+			ch.slot = i;
+			
+			for (n = 0; n < znet_last_process; n++) {
+                if (znet_processes[n].exited
+                        || znet_processes[n].pid == -1
+                        || znet_processes[n].channel[0] == -1)
+                {
+                    continue;
+                }
+
+                znet_write_channel(znet_processes[n].channel[0],
+                                      &ch, sizeof(znet_channel_t));
+            }
+			if(znet_spawn_process(znet_processes[i].proc,znet_processes[i].name) == -1)
+			{
+				continue;
+			}
+			ch.command = ZNET_CMD_OPEN_CHANNEL;
+			ch.pid = znet_processes[znet_process_slot].pid;
+			ch.slot = znet_process_slot;
+			ch.fd = znet_processes[znet_process_slot].channel[0];
+
+			znet_pass_open_channel(&ch);
+			continue;
+		
+		}
 	}
 	return 0;
 }

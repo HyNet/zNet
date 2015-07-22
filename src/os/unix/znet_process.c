@@ -59,6 +59,7 @@ znet_signal_handler(int signo)
 		znet_terminate = 1;
 		break;
 	case SIGCHLD:
+		znet_reap = 1;
 		znet_process_get_status();
 		break;
 	default:
@@ -182,14 +183,17 @@ znet_process_get_status(void)
 		printf("znet process waitpid %d\n", pid);
 		
 		if (0 == pid){
+			printf("znet process wait success\n");
 			return;
 		}
 		
 		if (pid == -1) {
 			err = errno;
 			if (err == EINTR){
+				printf("znet wait pid get EINTR\n");
 				continue;
 			}
+			printf("znet wait pid failed\n");
 			return;
 		}
 
@@ -201,6 +205,7 @@ znet_process_get_status(void)
 				break;	
 			}
 		}
+		
 	}	
 	return;
 }
