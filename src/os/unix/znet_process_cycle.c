@@ -128,6 +128,6 @@ znet_pass_open_channel(znet_channel_t *ch)
 		{
 			continue;
 		}
-		// znet_write_channel
+		znet_write_channel(znet_processes[i].channel[0], ch, sizeof(znet_channel_t));
 	}
 }
