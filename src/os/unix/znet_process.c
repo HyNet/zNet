@@ -206,6 +206,16 @@ znet_process_get_status(void)
 			}
 		}
 		
+		if (WTERMSIG(status)) {
+			printf("process exited on singal %d\n", WTERMSIG(status));
+		}else{
+			printf("process exited code %d\n", WEXITSTATUS(status));
+		}
+		
+		if (WEXITSTATUS(status) == 2){
+			printf("exited with fatal code %d\n", WEXITSTATUS(status));
+		}
+		
 	}	
 	return;
 }
