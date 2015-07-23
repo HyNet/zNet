@@ -94,6 +94,10 @@ static void
 znet_worker_process_exit(void)
 {
 	printf("exit worker process\n");
+	if(close(znet_processes[znet_process_slot].channel[1] == -1))
+	{
+		printf("worker process exit: close %d slot channel failed\n", (int)znet_process_slot);
+	}
 	exit(0);
 }
 
@@ -128,6 +132,7 @@ znet_reap_children(void)
 		if(znet_processes[i].pid == -1)
 			continue;
 		if(znet_processes[i].exited){
+			printf("reap children: %d slot\n",(int)i);
 			znet_close_channel(znet_processes[i].channel);
 			znet_processes[i].channel[0] = -1;
 			znet_processes[i].channel[1] = -1;
@@ -146,17 +151,15 @@ znet_reap_children(void)
                 znet_write_channel(znet_processes[n].channel[0],
                                       &ch, sizeof(znet_channel_t));
             }
-			if(znet_spawn_process(znet_processes[i].proc,znet_processes[i].name) == -1)
-			{
-				continue;
-			}
+			//if(znet_spawn_process(znet_processes[i].proc,znet_processes[i].name) == -1)
+			//{
+			//	continue;
+			//}
 			ch.command = ZNET_CMD_OPEN_CHANNEL;
 			ch.pid = znet_processes[znet_process_slot].pid;
 			ch.slot = znet_process_slot;
 			ch.fd = znet_processes[znet_process_slot].channel[0];
-
 			znet_pass_open_channel(&ch);
-			continue;
 		
 		}
 	}
