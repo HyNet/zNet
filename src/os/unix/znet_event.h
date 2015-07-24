@@ -10,6 +10,8 @@
 
 typedef struct {
 	void *data;
+	unsigned instance:1;
+	unsigned active:1;
 }znet_event_t;
 
 typedef struct {
@@ -21,6 +23,9 @@ typedef struct {
 }znet_event_actions_t;
 
 extern znet_event_actions_t znet_event_actions;
+
+#define ZNET_READ_EVENT     (EPOLLIN|EPOLLRDHUP)
+#define ZNET_WRITE_EVENT    EPOLLOUT
 
 #define znet_process_events   znet_event_actions.process_events
 
