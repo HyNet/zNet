@@ -67,6 +67,46 @@ znet_epoll_add_event(znet_event_t *ev, znet_int_t event, znet_uint_t flags)
 static znet_int_t 
 znet_epoll_del_event(znet_event_t *ev, znet_int_t event, znet_uint_t flags)
 {
+	int op;
+	uint32_t prev;
+	znet_event_t *e;
+	znet_connection_t *c;
+	struct epoll_event ee;
+	
+	if (flags & ZNET_CLOSE_EVENT) {
+        ev->active = 0;
+        return 0;
+    }
+
+    c = ev->data;
+
+    if (event == ZNET_READ_EVENT) {
+        e = c->write;
+        prev = EPOLLOUT;
+
+    } else {
+        e = c->read;
+        prev = EPOLLIN|EPOLLRDHUP;
+    }
+
+    if (e->active) {
+        op = EPOLL_CTL_MOD;
+        ee.events = prev | (uint32_t) flags;
+        ee.data.ptr = (void *) ((uintptr_t) c | ev->instance);
+
+    } else {
+        op = EPOLL_CTL_DEL;
+        ee.events = 0;
+        ee.data.ptr = NULL;
+    }
+	
+	if (epoll_ctl(ep, op, c->fd, &ee) == -1) {
+        printf("epoll_ctl(%d, %d) failed", op, c->fd);
+        return -1;
+    }
+
+    ev->active = 0;
+
 	return 0;
 }
 

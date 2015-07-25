@@ -26,6 +26,7 @@ extern znet_event_actions_t znet_event_actions;
 
 #define ZNET_READ_EVENT     (EPOLLIN|EPOLLRDHUP)
 #define ZNET_WRITE_EVENT    EPOLLOUT
+#define  ZNET_CLOSE_EVENT 1
 
 #define znet_process_events   znet_event_actions.process_events
 
