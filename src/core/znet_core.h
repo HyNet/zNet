@@ -27,6 +27,7 @@
 typedef intptr_t	znet_int_t;
 typedef uintptr_t	znet_uint_t;
 typedef intptr_t 	znet_flag_t;
+typedef int			znet_fd_t;
 
 #include<znet.h>
 #include<znet_string.h>
@@ -36,6 +37,9 @@ typedef intptr_t 	znet_flag_t;
 #include<znet_connection.h>
 #include<znet_process.h>
 #include<znet_process_cycle.h>
+
+typedef void (*znet_event_handler_pt)(znet_event_t *ev);
+
 #include<znet_channel.h>
 
 
