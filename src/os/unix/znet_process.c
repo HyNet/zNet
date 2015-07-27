@@ -86,17 +86,29 @@ znet_os_signal_process(char *sig, znet_int_t pid)
 
 
 znet_pid_t 
-znet_spawn_process(znet_spawn_proc_pt proc, char *name)
+znet_spawn_process(znet_spawn_proc_pt proc, char *name, znet_int_t respawn)
 {
 	printf("znet spawn worker process\n");
 	znet_int_t s;
 	znet_pid_t pid;
 
-	for(s = 0; s < znet_last_process; s++){
-		if(znet_processes[s].pid == -1){
-			break;
+	if(respawn >= 0){
+		s = respawn;
+	}else{
+
+		for(s = 0; s < znet_last_process; s++){
+			if(znet_processes[s].pid == -1){
+				break;
+			}
 		}
+	
+		if (s == ZNET_MAX_PROCESSES) {
+            printf("no more than %d processes can be spawned", ZNET_MAX_PROCESSES);
+            return -1;
+        }
 	}
+
+	printf("spawn process: get empty slot: %d\n", (int)s);
 	
 	if (s == ZNET_MAX_PROCESSES){
 		return ZNET_INVALID_PID;
