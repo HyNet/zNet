@@ -5,6 +5,7 @@
 
 #include<znet_core.h>
 
+static void znet_worker_process_init(void);
 static void znet_worker_process_cycle(void);
 static void znet_worker_process_exit(void);
 static void znet_start_worker_process(znet_int_t n);
@@ -75,8 +76,48 @@ znet_master_process_exit(void)
 	exit(0);
 }
 
+
+static void 
+znet_worker_process_init(void)
+{
+	sigset_t set;
+	znet_int_t n;
+	
+	printf("worker process init\n");
+	sigemptyset(&set);
+	if (sigprocmask(SIG_SETMASK, &set, NULL) == -1) {
+		printf("sigprocmask() failed\n");
+    }
+
+	for(n = 0; n < znet_last_process; n++) {
+		if (znet_processes[n].pid == -1) {
+            continue;
+        }
+
+        if (n == znet_process_slot) {
+            continue;
+        }
+
+        if (znet_processes[n].channel[1] == -1) {
+            continue;
+        }
+		
+		printf("close worker process channel: %d slot\n", (int)n);
+        if (close(znet_processes[n].channel[1]) == -1) {
+			printf("close() channel failed\n");
+        }
+	}
+	
+	if (close(znet_processes[znet_process_slot].channel[0]) == -1) {
+            printf("close() channel failed\n");
+    }
+	
+}
+
+
 void znet_worker_process_cycle(void)
 {
+	znet_worker_process_init();
 	znet_setproctitle("worker process");
 	for(;;){
 		printf("worker cycle...\n");
@@ -84,8 +125,8 @@ void znet_worker_process_cycle(void)
 			printf("stop worker cycle...\n");
 			znet_worker_process_exit();
 		}
-		sleep(10);
-		znet_worker_process_exit();
+		sleep(20);
+		//znet_worker_process_exit();
 	}
 }
 
@@ -110,7 +151,7 @@ znet_start_worker_process(znet_int_t n)
 	ch.command = ZNET_CMD_OPEN_CHANNEL;	
 	for (i = 0; i < n; i++) {
 		//znet spawn process
-		znet_spawn_process(znet_worker_process_cycle, "worker process");
+		znet_spawn_process(znet_worker_process_cycle, "worker process", ZNET_PROCESS_RESPAWN);
 		ch.pid = znet_processes[znet_process_slot].pid;
 		ch.slot = znet_process_slot;
 		ch.fd = znet_processes[znet_process_slot].channel[0];
@@ -151,10 +192,10 @@ znet_reap_children(void)
                 znet_write_channel(znet_processes[n].channel[0],
                                       &ch, sizeof(znet_channel_t));
             }
-			//if(znet_spawn_process(znet_processes[i].proc,znet_processes[i].name) == -1)
-			//{
-			//	continue;
-			//}
+			if(znet_spawn_process(znet_processes[i].proc,znet_processes[i].name, i) == -1)
+			{
+				continue;
+			}
 			ch.command = ZNET_CMD_OPEN_CHANNEL;
 			ch.pid = znet_processes[znet_process_slot].pid;
 			ch.slot = znet_process_slot;

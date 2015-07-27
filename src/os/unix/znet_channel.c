@@ -50,9 +50,10 @@ znet_write_channel(znet_socket_t s, znet_channel_t *ch, size_t size)
 		if (errno == EAGAIN) {
 			return -2;
 		}
+		printf("write channel failed\n");
 		return -1;
 	}
-
+	printf("write channel successfully\n");
 	return 0;
 }
 
@@ -116,7 +117,7 @@ znet_read_channel(znet_socket_t s, znet_channel_t *ch, size_t size)
     if (msg.msg_flags & (MSG_TRUNC|MSG_CTRUNC)) {
 		printf("recvmsg() truncated data\n");
     }
-	
+	printf("read channel successfully\n");
 	return n;
 
 }
@@ -137,5 +138,6 @@ void znet_close_channel(int *fd)
     if (close(fd[1]) == -1) {
         printf("close() channel failed\n");
     }
+	printf("close channel successfully\n");
 }
 

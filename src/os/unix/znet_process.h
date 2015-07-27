@@ -9,6 +9,7 @@
 #define ZNET_MAX_PROCESSES 1024
 #define ZNET_INVALID_PID -1
 
+#define ZNET_PROCESS_RESPAWN -3
 
 typedef pid_t znet_pid_t;
 
@@ -32,7 +33,7 @@ typedef struct {
 
 znet_int_t znet_init_signals(void);
 znet_int_t znet_os_signal_process(char *sig, znet_int_t pid);
-znet_pid_t znet_spawn_process(znet_spawn_proc_pt proc, char *name);
+znet_pid_t znet_spawn_process(znet_spawn_proc_pt proc, char *name, znet_int_t respawn);
 
 
 extern int znet_argc;
