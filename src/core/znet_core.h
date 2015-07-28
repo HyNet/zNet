@@ -24,10 +24,14 @@
 #include<fcntl.h>
 
 
+
 typedef intptr_t	znet_int_t;
 typedef uintptr_t	znet_uint_t;
 typedef intptr_t 	znet_flag_t;
 typedef int			znet_fd_t;
+typedef struct znet_event_s znet_event_t;
+typedef struct znet_connection_s znet_connection_t;
+typedef void (*znet_event_handler_pt)(znet_event_t *ev);
 
 #include<znet.h>
 #include<znet_string.h>
@@ -38,7 +42,6 @@ typedef int			znet_fd_t;
 #include<znet_process.h>
 #include<znet_process_cycle.h>
 
-typedef void (*znet_event_handler_pt)(znet_event_t *ev);
 
 #include<znet_channel.h>
 
