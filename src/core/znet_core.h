@@ -30,6 +30,7 @@ typedef uintptr_t	znet_uint_t;
 typedef intptr_t 	znet_flag_t;
 typedef int			znet_fd_t;
 typedef struct znet_event_s znet_event_t;
+typedef struct znet_listening_s znet_listening_t;
 typedef struct znet_connection_s znet_connection_t;
 typedef void (*znet_event_handler_pt)(znet_event_t *ev);
 

@@ -21,5 +21,7 @@ struct znet_connection_s{
 	znet_socket_t fd;
 };
 
+znet_listening_t *znet_create_listening(void* sockaddr, socklen_t socklen);
+
 
 #endif /*_ZNET_CONNECTION_H_INCLUDED_*/
