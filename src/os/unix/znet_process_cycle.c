@@ -12,6 +12,7 @@ static void znet_start_worker_process(znet_int_t n);
 static void znet_master_process_exit(void);
 static void znet_pass_open_channel(znet_channel_t *ch);
 static znet_uint_t znet_reap_children(void);
+static void znet_channel_handler(znet_event_t *ev);
 
 sig_atomic_t znet_terminate;
 sig_atomic_t znet_reap;
@@ -111,6 +112,10 @@ znet_worker_process_init(void)
 	if (close(znet_processes[znet_process_slot].channel[0]) == -1) {
             printf("close() channel failed\n");
     }
+	if(znet_add_channel_event(znet_channel, ZNET_READ_EVENT, znet_channel_handler) == -1)
+	{
+		exit(2);
+	}
 	
 }
 
@@ -220,4 +225,22 @@ znet_pass_open_channel(znet_channel_t *ch)
 		}
 		znet_write_channel(znet_processes[i].channel[0], ch, sizeof(znet_channel_t));
 	}
+}
+
+static void 
+znet_channel_handler(znet_event_t *ev)
+{
+	znet_int_t n;
+	znet_channel_t ch;
+	znet_connection_t *c;
+	
+	c = ev->data;
+	for(;;){
+		n = znet_read_channel(c->fd, &ch, sizeof(znet_channel_t));
+		if(n == -1){
+			return;
+		}
+
+	}
+	
 }
