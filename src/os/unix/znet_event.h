@@ -8,11 +8,15 @@
 
 #include<znet_core.h>
 
-typedef struct {
+struct znet_event_s{
 	void *data;
+	unsigned write:1;
+	unsigned accept:1;
 	unsigned instance:1;
 	unsigned active:1;
-}znet_event_t;
+	unsigned ready:1;
+	znet_event_handler_pt handler;
+};
 
 typedef struct {
 	znet_int_t (*add)(znet_event_t *ev, znet_int_t event, znet_uint_t flags);
