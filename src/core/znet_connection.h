@@ -8,6 +8,12 @@
 
 #include<znet_core.h>
 
+struct znet_listening_s{
+	znet_socket_t fd;
+	struct sockaddr *sockaddr;
+	socklen_t socklen;
+};
+
 struct znet_connection_s{
 	void	*data;
 	znet_event_t *read;
