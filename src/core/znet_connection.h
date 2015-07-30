@@ -9,9 +9,16 @@
 #include<znet_core.h>
 
 struct znet_listening_s{
-	znet_socket_t fd;
+	znet_socket_t	fd;
 	struct sockaddr *sockaddr;
-	socklen_t socklen;
+	socklen_t		socklen;
+	size_t			addr_text_len;
+	char*			addr_text;
+	int				type;
+	int				backlog;
+	int				rcvbuf;
+	int				sndbuf;
+	znet_connection_handler_pt handler;	
 };
 
 struct znet_connection_s{
