@@ -36,6 +36,7 @@ typedef void (*znet_event_handler_pt)(znet_event_t *ev);
 typedef void (*znet_connection_handler_pt)(znet_connection_t *c);
 
 #include<znet.h>
+#include<znet_cycle.h>
 #include<znet_string.h>
 #include<znet_setproctitle.h>
 #include<znet_socket.h>
