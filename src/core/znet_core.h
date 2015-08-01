@@ -32,11 +32,13 @@ typedef int			znet_fd_t;
 typedef struct znet_event_s znet_event_t;
 typedef struct znet_listening_s znet_listening_t;
 typedef struct znet_connection_s znet_connection_t;
+typedef struct znet_pool_s		znet_pool_t;
 typedef void (*znet_event_handler_pt)(znet_event_t *ev);
 typedef void (*znet_connection_handler_pt)(znet_connection_t *c);
 
 #include<znet.h>
 #include<znet_cycle.h>
+#include<znet_palloc.h>
 #include<znet_string.h>
 #include<znet_setproctitle.h>
 #include<znet_socket.h>
