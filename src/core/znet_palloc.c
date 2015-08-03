@@ -5,6 +5,9 @@
 
 #include<znet_core.h>
 
+static void *
+znet_palloc_block(znet_pool_t *pool, size_t size);
+
 znet_pool_t *
 znet_create_pool(size_t size)
 {
@@ -42,4 +45,34 @@ znet_destroy_pool(znet_pool_t *pool)
 		}
 	}
 	
+}
+
+static void*
+znet_palloc_block(znet_pool_t *pool, size_t size)
+{
+	u_char	*m;
+	size_t psize;
+	znet_pool_t *new, *p;
+	
+	psize = (size_t)(pool->d.end - (u_char*)pool);
+	m = malloc(psize);
+	if(m == NULL){
+		return NULL;
+	}
+	
+	new = (znet_pool_t*)m;
+	new->d.end = m + psize;
+	new->d.next = NULL;
+	new->d.failed = 0;
+	
+	m += sizeof(znet_pool_data_t);
+	new->d.last = m + size;
+	
+	for(p = pool->current; p->d.next; p = p->d.next){
+		if(p->d.failed++ > 4){
+			pool->current = p->d.next;
+		}
+	}
+	p->d.next = new;
+	return m;
 }
