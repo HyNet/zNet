@@ -76,3 +76,14 @@ znet_palloc_block(znet_pool_t *pool, size_t size)
 	p->d.next = new;
 	return m;
 }
+
+void *
+znet_pcalloc(znet_pool_t *pool, size_t size)
+{
+	void *p;
+	p = znet_palloc(pool, size);
+	if(p){
+		memset(p, 0, size);
+	}	
+	return p;
+}
