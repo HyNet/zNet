@@ -38,6 +38,7 @@ znet_pool_t *znet_create_pool(size_t size);
 void znet_destroy_pool(znet_pool_t *pool);
 
 void *znet_pcalloc(znet_pool_t *pool, size_t size);
+void *znet_pnalloc(znet_pool_t *pool, size_t size);
 
 
 #endif /*_ZNET_PALLOC_H_INCLUDED_*/
