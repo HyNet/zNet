@@ -115,3 +115,31 @@ znet_pnalloc(znet_pool_t *pool, size_t size)
     }
 }
 
+znet_pool_cleanup_t *
+znet_pool_cleanup_add(znet_pool_t *p, size_t size)
+{
+	znet_pool_cleanup_t  *c;
+
+    c = znet_palloc(p, sizeof(znet_pool_cleanup_t));
+    if (c == NULL) {
+        return NULL;
+    }
+
+    if (size) {
+        c->data = znet_palloc(p, size);
+        if (c->data == NULL) {
+            return NULL;
+        }
+
+    } else {
+        c->data = NULL;
+    }
+
+    c->handler = NULL;
+    c->next = p->cleanup;
+
+    p->cleanup = c;
+
+
+    return c;
+}
