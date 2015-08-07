@@ -10,6 +10,7 @@ CORE_DEPS="$CORE_INCS/znet.h \
 			$CORE_INCS/znet_string.h \
 			$CORE_INCS/znet_connection.h \
 			$CORE_INCS/znet_cycle.h \
+			$CORE_INCS/znet_array.h \
 			"
 
 #CORE_SRCS="$CORE_INCS/znet.c \
@@ -19,6 +20,7 @@ CORE_SRCS="$CORE_INCS/znet.c \
 			$CORE_INCS/znet_string.c \
 			$CORE_INCS/znet_connection.c \
 			$CORE_INCS/znet_cycle.c \
+			$CORE_INCS/znet_array.c \
 			"
 
 UNIX_INCS="src/os/unix"
