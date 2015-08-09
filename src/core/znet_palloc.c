@@ -83,9 +83,37 @@ znet_pcalloc(znet_pool_t *pool, size_t size)
 	void *p;
 	p = znet_palloc(pool, size);
 	if(p){
-		memset(p, 0, size);
+		memset(p, 0		, size);
 	}	
 	return p;
+}
+
+void *
+znet_palloc(znet_pool_t *pool, size_t size)
+{
+    u_char      *m;
+    znet_pool_t  *p;
+
+    if (size <= pool->max) {
+
+        p = pool->current;
+
+        do {
+            m = znet_align_ptr(p->d.last, ZNET_ALIGNMENT);
+
+            if ((size_t) (p->d.end - m) >= size) {
+                p->d.last = m + size;
+
+                return m;
+            }
+
+            p = p->d.next;
+
+        } while (p);
+
+        return znet_palloc_block(pool, size);
+    }
+
 }
 
 void *
