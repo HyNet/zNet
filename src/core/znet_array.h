@@ -16,6 +16,8 @@ typedef struct{
 	znet_pool_t *pool;
 }znet_array_t;
 
+znet_array_t *znet_array_create(znet_pool_t *p, znet_uint_t n, size_t size);
+
 static inline znet_int_t
 znet_array_init(znet_array_t *array, znet_pool_t *pool, znet_uint_t n, size_t size)
 {
@@ -24,8 +26,8 @@ znet_array_init(znet_array_t *array, znet_pool_t *pool, znet_uint_t n, size_t si
 	array->nalloc = n;
 	array->pool = pool;
 	
-	array->elts = znet_palloc(pool n*size);
-	if(array->elts = NULL){
+	array->elts = znet_palloc(pool, n*size);
+	if(array->elts == NULL){
 		return -1;
 	}
 	return 0;
