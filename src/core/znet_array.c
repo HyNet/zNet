@@ -22,3 +22,18 @@ znet_array_create(znet_pool_t *p, znet_uint_t n, size_t size)
     return a;
 }
 
+void 
+znet_array_destroy(znet_array_t *a)
+{
+	znet_pool_t  *p;
+
+    p = a->pool;
+
+    if ((u_char *) a->elts + a->size * a->nalloc == p->d.last) {
+        p->d.last -= a->size * a->nalloc;
+    }
+
+    if ((u_char *) a + sizeof(znet_array_t) == p->d.last) {
+        p->d.last = (u_char *) a;
+    }
+}

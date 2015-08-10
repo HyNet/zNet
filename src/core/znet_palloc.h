@@ -22,7 +22,7 @@ typedef struct znet_pool_cleanup_s znet_pool_cleanup_t;
 struct znet_pool_cleanup_s{
 	znet_pool_cleanup_pt	handler;
 	void					*data;
-	znet_pool_cleanup_pt	*next;
+	znet_pool_cleanup_t	*next;
 };
 
 typedef struct{
