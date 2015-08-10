@@ -23,7 +23,7 @@ znet_create_pool(size_t size)
 	size = size - sizeof(znet_pool_t);
 	p->max = (size < ZNET_MAX_ALLOC_FROM_POOL)? size : ZNET_MAX_ALLOC_FROM_POOL;
 	p->current = p;
-	p->pool_cleanup_t = NULL;
+	p->cleanup = NULL;
 	return p;
 }
 
@@ -38,7 +38,7 @@ znet_destroy_pool(znet_pool_t *pool)
 		}
 	}
 	
-	for(p = pool, n = pool->next; ;p = n; n = n->d.next){
+	for(p = pool, n = pool->d.next; ;p = n, n = n->d.next){
 		free(p);
 		if(n == NULL){
 			break;
@@ -113,6 +113,7 @@ znet_palloc(znet_pool_t *pool, size_t size)
 
         return znet_palloc_block(pool, size);
     }
+	return NULL;
 
 }
 
@@ -141,6 +142,7 @@ znet_pnalloc(znet_pool_t *pool, size_t size)
 
         return znet_palloc_block(pool, size);
     }
+	return NULL;
 }
 
 znet_pool_cleanup_t *

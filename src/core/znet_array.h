@@ -17,6 +17,7 @@ typedef struct{
 }znet_array_t;
 
 znet_array_t *znet_array_create(znet_pool_t *p, znet_uint_t n, size_t size);
+void znet_array_destroy(znet_array_t *a);
 
 static inline znet_int_t
 znet_array_init(znet_array_t *array, znet_pool_t *pool, znet_uint_t n, size_t size)
