@@ -82,3 +82,51 @@ void *znet_array_push(znet_array_t *a)
 
     return elt;
 }
+
+void *znet_array_push_n(znet_array_t *a, znet_uint_t n)
+{
+	void        *elt, *new;
+    size_t       size;
+    znet_uint_t   nalloc;
+    znet_pool_t  *p;
+
+    size = n * a->size;
+
+    if (a->nelts + n > a->nalloc) {
+
+        /* the array is full */
+
+        p = a->pool;
+
+        if ((u_char *) a->elts + a->size * a->nalloc == p->d.last
+            && p->d.last + size <= p->d.end)
+        {
+            /*
+             * the array allocation is the last in the pool
+             * and there is space for new allocation
+             */
+
+            p->d.last += size;
+            a->nalloc += n;
+
+        } else {
+            /* allocate a new array */
+
+            nalloc = 2 * ((n >= a->nalloc) ? n : a->nalloc);
+
+            new = znet_palloc(p, nalloc * a->size);
+            if (new == NULL) {
+                return NULL;
+            }
+
+            memcpy(new, a->elts, a->nelts * a->size);
+            a->elts = new;
+            a->nalloc = nalloc;
+        }
+    }
+
+    elt = (u_char *) a->elts + a->size * a->nelts;
+    a->nelts += n;
+
+    return elt;
+}
