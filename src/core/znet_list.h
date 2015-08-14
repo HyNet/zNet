@@ -22,4 +22,24 @@ typedef struct {
     znet_pool_t       *pool;
 } znet_list_t;
 
+znet_list_t *znet_list_create(znet_pool_t *pool, znet_uint_t n, size_t size);
+
+static inline znet_int_t
+znet_list_init(znet_list_t *list, znet_pool_t *pool, znet_uint_t n, size_t size)
+{
+    list->part.elts = znet_palloc(pool, n * size);
+    if (list->part.elts == NULL) {
+        return -1;
+    }
+
+    list->part.nelts = 0;
+    list->part.next = NULL;
+    list->last = &list->part;
+    list->size = size;
+    list->nalloc = n;
+    list->pool = pool;
+
+    return 0;
+}
+
 #endif /*_ZNET_LIST_H_INCLUDED_*/
