@@ -42,4 +42,5 @@ znet_list_init(znet_list_t *list, znet_pool_t *pool, znet_uint_t n, size_t size)
     return 0;
 }
 
+void *znet_list_push(znet_list_t *list);
 #endif /*_ZNET_LIST_H_INCLUDED_*/
