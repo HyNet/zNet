@@ -42,6 +42,7 @@ typedef void (*znet_connection_handler_pt)(znet_connection_t *c);
 #include<znet_string.h>
 #include<znet_array.h>
 #include<znet_list.h>
+#include<znet_queue.h>
 #include<znet_setproctitle.h>
 #include<znet_socket.h>
 #include<znet_event.h>
