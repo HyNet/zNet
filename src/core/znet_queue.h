@@ -19,5 +19,13 @@ struct znet_queue_s {
 	(q)->prev = q;							\
 	(q)->next = q
 
+#define znet_queue_empty(h)					\
+	(h == (h)->prev)
+
+#define znet_queue_insert_head(h, x)		\
+	(x)->next = (h)->next;					\
+	(x)->next->prev = x;					\
+	(x)->prev = h;							\
+	(h)->next = x
 
 #endif /*_ZNET_QUEUE_H_INCLUDED_*/
