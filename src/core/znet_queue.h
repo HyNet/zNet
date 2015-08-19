@@ -28,4 +28,26 @@ struct znet_queue_s {
 	(x)->prev = h;							\
 	(h)->next = x
 
+#define znet_queue_insert_after znet_queue_insert_head
+
+#define znet_queue_insert_tail(h, x)		\
+	(x)->prev = (h)->prev;					\
+	(x)->prev->next = x;					\
+	(x)->next = h;							\
+	(h)->prev = x
+
+#define znet_queue_head(h)					\
+	(h)->next
+
+#define znet_queue_last(h)					\
+	(h)->prev
+
+#define znet_queue_sentinel(h)				\
+	(h)
+#define znet_queue_next(h)					\
+	(h)->next
+
+#define znet_queue_prev(q)					\
+	(q)->prev
+
 #endif /*_ZNET_QUEUE_H_INCLUDED_*/
