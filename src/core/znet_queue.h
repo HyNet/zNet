@@ -50,4 +50,18 @@ struct znet_queue_s {
 #define znet_queue_prev(q)					\
 	(q)->prev
 
+#define znet_queue_remove(x)				\
+	(x)->prev->next = (x)->next				\
+	(x)->next->prev = (x)->prev
+
+#define znet_queue_add(h,n)					\
+	(h)->prev->next = (n)->next;			\
+	(n)->next->prev = (h)->prev;			\
+	(h)->prev = (n)->prev;					\
+	(h)->prev->next = h
+
+#define znet_queue_data(q, type, link)				\
+	(type *)((u_char *) q - offsetof(type, link))
+
+
 #endif /*_ZNET_QUEUE_H_INCLUDED_*/
