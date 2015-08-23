@@ -54,6 +54,14 @@ struct znet_queue_s {
 	(x)->prev->next = (x)->next				\
 	(x)->next->prev = (x)->prev
 
+#define znet_queue_split(h, q, n)			\
+	(n)->prev = (h)->prev;					\
+	(n)->prev->next = n;					\
+	(n)->next = q;							\
+	(h)->prev = (q)->prev;					\
+	(h)->prev->next = h;					\
+	(q)->prev = n							
+
 #define znet_queue_add(h,n)					\
 	(h)->prev->next = (n)->next;			\
 	(n)->next->prev = (h)->prev;			\
