@@ -71,5 +71,6 @@ struct znet_queue_s {
 #define znet_queue_data(q, type, link)				\
 	(type *)((u_char *) q - offsetof(type, link))
 
+znet_queue_t *znet_queue_middle(znet_queue_t *queue);
 
 #endif /*_ZNET_QUEUE_H_INCLUDED_*/
