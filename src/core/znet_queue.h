@@ -51,7 +51,7 @@ struct znet_queue_s {
 	(q)->prev
 
 #define znet_queue_remove(x)				\
-	(x)->prev->next = (x)->next				\
+	(x)->prev->next = (x)->next;				\
 	(x)->next->prev = (x)->prev
 
 #define znet_queue_split(h, q, n)			\
@@ -72,5 +72,8 @@ struct znet_queue_s {
 	(type *)((u_char *) q - offsetof(type, link))
 
 znet_queue_t *znet_queue_middle(znet_queue_t *queue);
+
+void znet_queue_sort(znet_queue_t *queue,
+    znet_int_t (*cmp)(const znet_queue_t *, const znet_queue_t *));
 
 #endif /*_ZNET_QUEUE_H_INCLUDED_*/
