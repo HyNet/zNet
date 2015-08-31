@@ -32,7 +32,9 @@ extern znet_event_actions_t znet_event_actions;
 #define ZNET_WRITE_EVENT    EPOLLOUT
 #define  ZNET_CLOSE_EVENT 1
 
+#define znet_init_events	  znet_event_actions.init
 #define znet_process_events   znet_event_actions.process_events
+#define znet_done_events	  znet_event_actions.done_
 
 #define znet_add_event        znet_event_actions.add
 #define znet_del_event        znet_event_actions.del

@@ -90,6 +90,9 @@ znet_worker_process_init(void)
 		printf("sigprocmask() failed\n");
     }
 
+	if (znet_init_events() == -1){
+		printf("init events failed\n");
+	}
 	for(n = 0; n < znet_last_process; n++) {
 		if (znet_processes[n].pid == -1) {
             continue;
