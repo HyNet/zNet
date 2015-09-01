@@ -143,6 +143,7 @@ static void
 znet_worker_process_exit(void)
 {
 	printf("exit worker process\n");
+	znet_done_events();		
 	if(close(znet_processes[znet_process_slot].channel[1] == -1))
 	{
 		printf("worker process exit: close %d slot channel failed\n", (int)znet_process_slot);
